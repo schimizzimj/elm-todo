@@ -1,32 +1,37 @@
 module Main exposing (..)
 
 import Browser
-import Html exposing (Html, div, text, button)
-import Html.Events exposing (onClick)
+import Html exposing (Html, div, text, button, input)
+import Html.Events exposing (onClick, onInput)
+import Html.Attributes exposing (placeholder, value, type_)
+
 
 -- MODEL
 
 type alias Model =
-    Int
+    { tasks: List String
+    , newTask: String
+    }
 
 init : Model
 init =
-    0
+    { tasks = []
+    , newTask = ""
+    }
 
 -- UPDATE
 
 type Msg
-    = Increment
-    | Decrement
+    = AddTask
+    | UpdateNewTask String
 
 update : Msg -> Model -> Model
 update msg model =
     case msg of
-        Increment ->
-            model + 1
-
-        Decrement ->
-            model - 1
+        AddTask ->
+            { model | tasks = model.newTask :: model.tasks, newTask = "" }
+        UpdateNewTask newTask ->
+            { model | newTask = newTask }
 
 
 -- VIEW
@@ -34,9 +39,9 @@ update msg model =
 view : Model -> Html Msg
 view model =
     div []
-        [ div [] [ text (String.fromInt model)]
-        , div [] [ button [onClick Increment ] [ text "+" ] ]
-        , div [] [ button [onClick Decrement ] [ text "-" ] ]
+        [ input [ type_ "text", placeholder "Add a new task...", onInput UpdateNewTask, value model.newTask ] []
+        , button [ onClick AddTask ] [ text "Add task" ]
+        , div [] (List.map (\task -> div [] [ text task ]) model.tasks)
         ]
 
 -- MAIN
