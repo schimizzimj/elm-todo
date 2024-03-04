@@ -7,8 +7,17 @@
     <div id="app"></div>
     <script src="main.js"></script>
     <script>
+      // Load todos from local storage
+      const savedTodos = localStorage.getItem("saved-elm-todos");
+      const flags = savedTodos ? JSON.parse(savedTodos) : null;
+
       let app = Elm.Main.init({
         node: document.getElementById("app"),
+        flags: flags,
+      });
+
+      app.ports.setStorage.subscribe(function (todos) {
+        localStorage.setItem("saved-elm-todos", JSON.stringify(todos));
       });
     </script>
   </body>
