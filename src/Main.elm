@@ -3,7 +3,7 @@ port module Main exposing (..)
 import Browser
 import Html exposing (Html, div, text, button, input)
 import Html.Events exposing (onClick, onInput)
-import Html.Attributes exposing (placeholder, value, type_)
+import Html.Attributes exposing (placeholder, value, type_, class)
 import Json.Decode as Decode
 import Json.Encode as Encode
 import Html.Attributes exposing (disabled)
@@ -87,6 +87,7 @@ view model =
         [ input [ type_ "text", placeholder "Add a new task...", onInput UpdateTaskInput, value model.taskInput ] []
         , button [ onClick AddTask ] [ text "Add task" ]
         , div [] (List.map viewTask model.tasks)
+        , div [] [ viewControls model ]
         ]
 
 viewTask : Task -> Html Msg
@@ -94,6 +95,10 @@ viewTask task =
     div [] [ text task.description
     , input [ type_ "checkbox", onClick (CompleteTask task.id), disabled task.completed, checked task.completed ] []
     ]
+
+viewControls : Model -> Html Msg
+viewControls model =
+    div [ class "task-controls" ] [ text (String.fromInt (List.length model.tasks) ++ " tasks " ++ "(" ++ String.fromInt (List.length (List.filter .completed model.tasks )) ++ " completed)") ]
 
 -- MAIN
 
