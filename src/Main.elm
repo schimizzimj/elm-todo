@@ -6,6 +6,8 @@ import Html.Events exposing (onClick, onInput)
 import Html.Attributes exposing (placeholder, value, type_)
 import Json.Decode as Decode
 import Json.Encode as Encode
+import Html.Attributes exposing (disabled)
+import Html.Attributes exposing (checked)
 
 
 -- MODEL
@@ -90,8 +92,7 @@ view model =
 viewTask : Task -> Html Msg
 viewTask task =
     div [] [ text task.description
-    , button [ onClick (CompleteTask task.id) ] [ text "Complete" ]
-    , text (if task.completed then " (completed)" else "")
+    , input [ type_ "checkbox", onClick (CompleteTask task.id), disabled task.completed, checked task.completed ] []
     ]
 
 -- MAIN
