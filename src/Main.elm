@@ -8,6 +8,7 @@ import Json.Decode as Decode
 import Json.Encode as Encode
 import Html.Attributes exposing (disabled)
 import Html.Attributes exposing (checked)
+import Html.Events exposing (keyCode)
 
 
 -- MODEL
@@ -84,10 +85,23 @@ completeTask taskId task =
 view : Model -> Html Msg
 view model =
     div []
-        [ input [ type_ "text", placeholder "Add a new task...", onInput UpdateTaskInput, value model.taskInput ] []
-        , button [ onClick AddTask ] [ text "Add task" ]
+        [ viewInput model
         , div [] (List.map viewTask model.tasks)
         , div [] [ viewControls model ]
+        ]
+
+viewInput : Model -> Html Msg
+viewInput model =
+    div []
+        [ input 
+            [ type_ "text"
+            , placeholder "Add a new task..."
+            , onInput UpdateTaskInput
+            , onEnter AddTask
+            , value model.taskInput
+            ]
+            []
+        , button [ onClick AddTask ] [ text "Add task" ]
         ]
 
 viewTask : Task -> Html Msg
@@ -99,6 +113,19 @@ viewTask task =
 viewControls : Model -> Html Msg
 viewControls model =
     div [ class "task-controls" ] [ text (String.fromInt (List.length model.tasks) ++ " tasks " ++ "(" ++ String.fromInt (List.length (List.filter .completed model.tasks )) ++ " completed)") ]
+
+-- Event handlers
+
+onEnter : msg -> Html.Attribute msg
+onEnter msg =
+    Html.Events.on "keydown" (Decode.andThen (checkEnter msg) keyCode)
+
+checkEnter : msg -> Int -> Decode.Decoder msg
+checkEnter msg code =
+    if code == 13 then
+        Decode.succeed msg
+    else
+        Decode.fail "Not enter"
 
 -- MAIN
 
