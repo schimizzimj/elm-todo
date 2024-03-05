@@ -103,3 +103,8 @@ body {
 .task-controls {
   color: rgba(255, 255, 255, 0.5);
 }
+
+.task.completed {
+  text-decoration: line-through;
+  opacity: 0.3;
+}

@@ -106,7 +106,9 @@ viewInput model =
 
 viewTask : Task -> Html Msg
 viewTask task =
-    div [] [ text task.description
+    div [
+        class (if task.completed then "task completed" else "task")
+    ] [ text task.description
     , input [ type_ "checkbox", onClick (CompleteTask task.id), disabled task.completed, checked task.completed ] []
     ]
 
