@@ -1,0 +1,9 @@
+{
+  "devDependencies": {
+    "uglify-js": "^3.17.4"
+  },
+  "scripts": {
+    "build": "sh ./optimize.sh src/Main.elm",
+    "build:prod": "npm run build && node ./modifyHtml.js"
+  }
+}
