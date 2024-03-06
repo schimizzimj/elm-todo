@@ -4,6 +4,6 @@
   },
   "scripts": {
     "build": "sh ./optimize.sh src/Main.elm",
-    "build:prod": "npm install && npm run build && node ./modifyHtml.js"
+    "build:prod": "npm run build && node ./modifyHtml.js"
   }
 }
