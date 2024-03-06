@@ -102,6 +102,11 @@ body {
 
 .task-controls {
   color: rgba(255, 255, 255, 0.5);
+  display: flex;
+}
+
+.task-controls button {
+  margin-left: 1rem;
 }
 
 .task.completed {

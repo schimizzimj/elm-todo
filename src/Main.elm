@@ -24,6 +24,7 @@ type alias Model =
     { tasks: List Task
     , taskInput: String
     , nextId: Int
+    , showCompleted: Bool
     }
 
 init : Decode.Value -> (Model, Cmd Msg)
@@ -36,6 +37,7 @@ init flags =
             { tasks = []
             , taskInput = ""
             , nextId = 0
+            , showCompleted = True
             }
     , Cmd.none)
 
@@ -52,6 +54,7 @@ type Msg
     = AddTask
     | UpdateTaskInput String
     | CompleteTask Int
+    | ToggleCompleted
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
@@ -72,6 +75,9 @@ update msg model =
         CompleteTask taskId ->
             ({ model | tasks = List.map (completeTask taskId) model.tasks }
             , Cmd.none)
+        ToggleCompleted ->
+            ({ model | showCompleted = not model.showCompleted }
+            , Cmd.none)
 
 completeTask : Int -> Task -> Task
 completeTask taskId task =
@@ -86,7 +92,7 @@ view : Model -> Html Msg
 view model =
     div []
         [ viewInput model
-        , div [] (List.map viewTask model.tasks)
+        , div [] (List.map viewTask (if model.showCompleted then model.tasks else List.filter (not << .completed) model.tasks))
         , div [] [ viewControls model ]
         ]
 
@@ -114,7 +120,9 @@ viewTask task =
 
 viewControls : Model -> Html Msg
 viewControls model =
-    div [ class "task-controls" ] [ text (String.fromInt (List.length model.tasks) ++ " tasks " ++ "(" ++ String.fromInt (List.length (List.filter .completed model.tasks )) ++ " completed)") ]
+    div [ class "task-controls" ] [ text (String.fromInt (List.length model.tasks) ++ " tasks " ++ "(" ++ String.fromInt (List.length (List.filter .completed model.tasks )) ++ " completed)")
+        , button [ onClick ToggleCompleted ] [ text (if model.showCompleted then "Hide completed" else "Show completed") ]
+        ]
 
 -- Event handlers
 
@@ -165,9 +173,11 @@ taskDecoder =
 
 decoder : Decode.Decoder Model
 decoder =
-    Decode.map2 (\tasks nextId -> { tasks = tasks, taskInput = "", nextId = nextId })
+    Decode.map3 (\tasks nextId showCompleted -> { tasks = tasks, taskInput = "", nextId = nextId, showCompleted = showCompleted })
         (Decode.field "tasks" (Decode.list taskDecoder))
         (Decode.field "nextId" Decode.int)
+        (Decode.field "showCompleted" Decode.bool)
+
 
 taskEncoder : Task -> Encode.Value
 taskEncoder task =
@@ -182,4 +192,5 @@ encoder model =
     Encode.object
         [ ( "tasks", Encode.list taskEncoder model.tasks )
         , ( "nextId", Encode.int model.nextId )
+        , ( "showCompleted", Encode.bool model.showCompleted)
         ]
