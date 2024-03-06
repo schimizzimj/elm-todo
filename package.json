@@ -4,6 +4,8 @@
   },
   "scripts": {
     "build": "sh ./optimize.sh src/Main.elm",
-    "build:prod": "npm run build && node ./modifyHtml.js"
+    "uglify": "npx uglifyjs main.js --compress 'pure_funcs=[F2,F3,F4,F5,F6,F7,F8,F9,A2,A3,A4,A5,A6,A7,A8,A9],pure_getters,keep_fargs=false,unsafe_comps,unsafe'",
+    "mangle": "npx uglifyjs main.js --mangle --output main.min.js",
+    "build:prod": "npm run build && npm run uglify && npm run mangle && node ./modifyHtml.js"
   }
 }
