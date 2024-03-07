@@ -55,6 +55,7 @@ type Msg
     | UpdateTaskInput String
     | CompleteTask Int
     | ToggleCompleted
+    | DeleteTask Int
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
@@ -78,6 +79,9 @@ update msg model =
         ToggleCompleted ->
             ({ model | showCompleted = not model.showCompleted }
             , Cmd.none)
+        DeleteTask taskId ->
+            ({ model | tasks = deleteTask taskId model.tasks }
+            , Cmd.none)
 
 completeTask : Int -> Task -> Task
 completeTask taskId task =
@@ -85,6 +89,10 @@ completeTask taskId task =
         { task | completed = True }
     else
         task
+
+deleteTask : Int -> List Task -> List Task
+deleteTask taskId tasks =
+    List.filter (\task -> task.id /= taskId) tasks
 
 -- VIEW
 
@@ -116,6 +124,7 @@ viewTask task =
         class (if task.completed then "task completed" else "task")
     ] [ text task.description
     , input [ type_ "checkbox", onClick (CompleteTask task.id), disabled task.completed, checked task.completed ] []
+    , button [ onClick (DeleteTask task.id) ] [ text "Delete" ]
     ]
 
 viewControls : Model -> Html Msg
