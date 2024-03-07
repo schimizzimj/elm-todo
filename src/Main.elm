@@ -3,7 +3,7 @@ port module Main exposing (..)
 import Browser
 import Html exposing (Html, div, text, button, input)
 import Html.Events exposing (onClick, onInput)
-import Html.Attributes exposing (placeholder, value, type_, class)
+import Html.Attributes exposing (placeholder, value, type_, class, style)
 import Json.Decode as Decode
 import Json.Encode as Encode
 import Html.Attributes exposing (disabled)
@@ -124,7 +124,7 @@ viewTask task =
         class (if task.completed then "task completed" else "task")
     ] [ text task.description
     , input [ type_ "checkbox", onClick (CompleteTask task.id), disabled task.completed, checked task.completed ] []
-    , button [ onClick (DeleteTask task.id) ] [ text "Delete" ]
+    , button [ onClick (DeleteTask task.id), style "color" "red", style "background" "none", style "border" "none" ] [ text "X" ]
     ]
 
 viewControls : Model -> Html Msg
