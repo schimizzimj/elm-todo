@@ -56,6 +56,7 @@ type Msg
     | CompleteTask Int
     | ToggleCompleted
     | DeleteTask Int
+    | DeleteCompleted
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
@@ -81,6 +82,9 @@ update msg model =
             , Cmd.none)
         DeleteTask taskId ->
             ({ model | tasks = deleteTask taskId model.tasks }
+            , Cmd.none)
+        DeleteCompleted ->
+            ({ model | tasks = List.filter (not << .completed) model.tasks }
             , Cmd.none)
 
 completeTask : Int -> Task -> Task
@@ -144,6 +148,7 @@ viewControls : Model -> Html Msg
 viewControls model =
     div [ class "task-controls" ] [ text (String.fromInt (List.length model.tasks) ++ " tasks " ++ "(" ++ String.fromInt (List.length (List.filter .completed model.tasks )) ++ " completed)")
         , button [ onClick ToggleCompleted ] [ text (if model.showCompleted then "Hide completed" else "Show completed") ]
+        , button [ onClick DeleteCompleted ] [ text "Delete completed" ]
         ]
 
 -- Event handlers
