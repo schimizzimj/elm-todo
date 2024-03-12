@@ -113,3 +113,21 @@ body {
   text-decoration: line-through;
   color: rgba(255, 255, 255, 0.5);
 }
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  border-radius: 3px;
+  background: rgba(240, 240, 240, 0.9);
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 3px 10px;
+  transition: all 0.2s ease;
+}
+
+.button:hover {
+  background: rgba(240, 240, 240, 0.5);
+}

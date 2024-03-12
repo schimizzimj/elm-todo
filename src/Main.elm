@@ -123,7 +123,7 @@ viewInput model =
             , value model.taskInput
             ]
             []
-        , button [ onClick AddTask ] [ text "Add task" ]
+        , button [ onClick AddTask, class "button" ] [ text "Add task" ]
         ]
 
 viewTask : Task -> Html Msg
@@ -151,9 +151,9 @@ viewTask task =
 viewControls : Model -> Html Msg
 viewControls model =
     div [ class "task-controls" ] [ text (String.fromInt (List.length model.tasks) ++ " tasks " ++ "(" ++ String.fromInt (List.length (List.filter .completed model.tasks )) ++ " completed)")
-        , button [ onClick ToggleCompleted ] [ text (if model.showCompleted then "Hide completed" else "Show completed") ]
-        , button [ onClick DeleteCompleted ] [ text "Delete completed" ]
-        , button [ onClick MarkAllCompleted ] [ text "Mark all completed" ]
+        , button [ onClick ToggleCompleted, class "button" ] [ text (if model.showCompleted then "Hide completed" else "Show completed") ]
+        , button [ onClick DeleteCompleted, class "button" ] [ text "Delete completed" ]
+        , button [ onClick MarkAllCompleted, class "button" ] [ text "Mark all completed" ]
         ]
 
 -- Event handlers
