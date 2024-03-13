@@ -110,6 +110,7 @@ view model =
         [ viewInput model
         , div [] (List.map viewTask (if model.showCompleted then model.tasks else List.filter (not << .completed) model.tasks))
         , div [] [ viewControls model ]
+        , div [] [ viewFooter ]
         ]
 
 viewInput : Model -> Html Msg
@@ -155,6 +156,10 @@ viewControls model =
         , button [ onClick DeleteCompleted, class "button" ] [ text "Delete completed" ]
         , button [ onClick MarkAllCompleted, class "button" ] [ text "Mark all completed" ]
         ]
+
+viewFooter : Html Msg
+viewFooter =
+    div [ class "footer" ] [ text "Marcus Schimizzi 2024." ]
 
 -- Event handlers
 

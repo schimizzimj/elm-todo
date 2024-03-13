@@ -131,3 +131,13 @@ body {
 .button:hover {
   background: rgba(240, 240, 240, 0.5);
 }
+
+.footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 1rem;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.5);
+}
